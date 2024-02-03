@@ -23,9 +23,10 @@ const signup = async (req, res, next) => {
         res.json('Signup successful');
     } catch (error) {
         // Handle errors, for example, duplicate key error
-        // if (error.code === 11000) { // MongoDB duplicate key error
-        //     return res.status(400).json({ message: 'Username or email already exists' });
-        // }
+        if (error.code === 11000) { // MongoDB duplicate key error
+            next(errorHandler(400 , 'Username or email already exists'))
+            // return res.status(400).json({ message: 'Username or email already exists' });
+        }
         // Generic error response
         next(error)
     }
