@@ -1,5 +1,7 @@
+
 import { useState } from 'react'
 import {BrowserRouter , Routes , Route} from 'react-router-dom'
+import FooterComp from './Component/Footer'
 import Header from './Component/Header'
 import About from './Pages/About'
 import Dashboard from './Pages/Dashboard'
@@ -26,9 +28,8 @@ function App() {
       
 
 
-
-
     </Routes>
+ <FooterComp />
     </BrowserRouter>
     </>
   )

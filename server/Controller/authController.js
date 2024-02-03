@@ -1,6 +1,7 @@
 const User = require('../Models/UserModel.js')
 const bcryptjs = require('bcryptjs');
 const errorHandler = require('../Utils/err.js')
+const jwt = require('jsonwebtoken')
 
 
 
@@ -24,7 +25,7 @@ const signup = async (req, res, next) => {
     } catch (error) {
         // Handle errors, for example, duplicate key error
         if (error.code === 11000) { // MongoDB duplicate key error
-            next(errorHandler(400 , 'Username or email already exists'))
+           return next(errorHandler(400 , 'Username or email already exists'))
             // return res.status(400).json({ message: 'Username or email already exists' });
         }
         // Generic error response
@@ -32,6 +33,35 @@ const signup = async (req, res, next) => {
     }
 };
 
+const signin = async (req,res,next ) =>{
+    const { email, password } = req.body;
+    if ( !email || !password ||  email == '' || password == '') {
+      next(errorHandler(400,'all field are required'))
+    }
+
+    try {
+        const validUser = await User.findOne({email})
+
+        if(!validUser){
+           return next(errorHandler(400,'Wrong Crediental'))
+        }
+        const validPassword = bcryptjs.compareSync(password,validUser.password)
+            if(!validPassword){
+                  return next(errorHandler(400,'Wrong Crediental'))
+            }
+
+        const token = jwt.sign(
+           { id:validUser._id},process.env.JWT_SECRET,
+        )
+
+        const {password:passWord , ...rest} = validUser._doc
+            res.status(200).cookie('access_token', token ,{httpOnly:true}).json(rest)
+        
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
-    signup
+    signup,signin
 };
