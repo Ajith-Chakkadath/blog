@@ -3,6 +3,7 @@ import { useState } from 'react'
 import {BrowserRouter , Routes , Route} from 'react-router-dom'
 import FooterComp from './Component/Footer'
 import Header from './Component/Header'
+import PrivateRoute from './Component/PrivateRoute'
 import About from './Pages/About'
 import Dashboard from './Pages/Dashboard'
 import Home from './Pages/Home'
@@ -23,7 +24,9 @@ function App() {
       <Route path='/about' element={<About />} />
       <Route path='/sign-in' element={<SignIn/>} />
       <Route path='/sign-up' element={<SignUp/>} />
+      <Route element = {<PrivateRoute />} >
       <Route path='/dashboard' element={<Dashboard/>} />
+      </Route>
       <Route path='/project' element={<Project/>} />
       
 
