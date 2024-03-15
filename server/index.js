@@ -4,6 +4,7 @@ const mongoose = require('mongoose')
 dotenv.config()
 const userRoutes = require('./Routes/userRoute')
 const authRoutes = require('./Routes/authRoute')
+const cookieParser = require('cookie-parser')
 
 mongoose.connect(process.env.MONGO_connect).then(() => {console.log('Mongodb is connected')}).catch((err)=>{
     console.log(err)
@@ -27,7 +28,7 @@ app.use((err,req,res,next) => {
     })
 })
 
-
+app.use(cookieParser)
 
 app.listen(3000 , ()=>{
     console.log('Server start to run at port 3000')
