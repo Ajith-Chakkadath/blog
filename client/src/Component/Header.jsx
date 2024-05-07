@@ -4,10 +4,30 @@ import {Link ,useLocation} from 'react-router-dom'
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon } from "react-icons/fa";
 import {useSelector}  from 'react-redux'
+import { signOutSucess } from '../Redux/User/userSlice';
+import { useDispatch } from 'react-redux';
  
 function Header() {
     const path = useLocation().pathname
     const {currentUser} = useSelector(state => state.user)
+    const dispatch = useDispatch()
+    const handleSignOut = async()=>{
+      try {
+        const res = await fetch(`api/user/signout`, {
+          method : "POST",
+        })
+        const data = await res.json()
+        if(!res.ok){
+          console.log(data.message)
+        }
+        else{
+          dispatch(signOutSucess())
+        }
+      } catch (error) {
+        console.log(error)
+        
+      }
+    }
   return (
     <Navbar className='border-b-2'> 
   <Link to='/' className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white'>
@@ -37,7 +57,7 @@ function Header() {
         <Dropdown.Item>Profile</Dropdown.Item>
       </Link>
       <Dropdown.Divider />
-    <DropdownItem >
+    <DropdownItem onClick={handleSignOut} >
       Sign out
     </DropdownItem>
     </Dropdown>
